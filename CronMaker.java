@@ -1,6 +1,3 @@
-package com.action_service.Service;
-
-import com.action_service.Entites.JobConfigurations;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
