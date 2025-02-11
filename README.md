@@ -8,6 +8,7 @@ DESCRIPTION
 This document explains how to generate Quartz cron expressions for different types 
 of scheduling requirements. It provides comprehensive examples and explanations 
 for various recurrence patterns.
+Coming soon: an update with a new feature for range and end time supported cron.
 
 CRON EXPRESSION FORMAT
 ---------------------
@@ -109,6 +110,15 @@ Cron: 0 8 10 ? * 1,7 *
 Custom Recurrence Examples:
 -------------------------
 
+IMPLEMENTATION NOTE
+-----------------
+For custom recurrences, the Quartz cron expression handles the basic scheduling,
+while additional skip logic is implemented in the executor code. 
+e.g. "0 8 10 12 */4 ? *", "*/4" just means step size 4 after the current execution's month and so on.
+The executor ensures that actions are only executed after the specified start time, then quartz continues
+the step increment logic. That code is avaiable as example snipets in CronMaker Class as 
+javaDoc if you are interested.
+
 1. Custom Weekly:
 Input:
 {
@@ -205,9 +215,3 @@ Sample cron expression breakdown: 0 8 10 ? * 2,6 *
 *   : Month (every month)
 2,6 : Day of the week (Monday and Friday)
 *   : Year (every year)
-
-IMPLEMENTATION NOTE
------------------
-For custom recurrences, the Quartz cron expression handles the basic scheduling,
-while additional skip logic is implemented in the executor code. The executor 
-ensures that actions are only executed after the specified start time.
