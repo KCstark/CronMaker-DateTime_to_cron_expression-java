@@ -1,234 +1,301 @@
-# CronMaker-DateTime_to_cron_expression-java
-This utility transforms date and time specifications into Quartz cron expressions, enabling precise and straightforward scheduling of background jobs.
+# CronMaker - Custom DateTime to cron expression - java
 
-CUSTOM QUARTZ CRON EXPLANATIONS:
+CUSTOM QUARTZ CRON EXPRESSION GENERATION
 
-This document provides a comprehensive explanation of how the CronMaker class generates Quartz cron expressions. It includes a detailed breakdown of different recurrence types and their corresponding configurations.
+This document explains how the CronMaker class generates Quartz cron expressions. It covers different recurrence types and their configurations.
 
-Format: <second> <minute> <hour> <day of the month> <month> <day of the week> <year>
+Quartz Cron Expression Format:
+<second> <minute> <hour> <day of the month> <month> <day of the week> <year>
 
-LINK: https://productresources.collibra.com/docs/collibra/latest/Content/Cron/co_quartz-cron-syntax.htm
+See the Quartz Cron Syntax Documentation: https://productresources.collibra.com/docs/collibra/latest/Content/Cron/co_quartz-cron-syntax.htm
 
-Examples of different combinations of inputs based on the recurrence type (recurrence) and the customRecurrence object (if applicable). Each example corresponds to a specific recurrence pattern.
+RECURRENCE TYPES AND EXAMPLES:
 
-Values for the recurrence:
-   - NO_REPEAT("does not repeat")
-   - WEEKDAY("every week day (mon - fri)")
-   - DAILY("daily")
-   - WEEKLY("weekly")
-   - MONTHLY("monthly")
-   - YEARLY("yearly")
-   - WEEKEND("weekend")
-   - CUSTOM("custom")
+Examples show inputs based on recurrence type and customRecurrence object.
 
-Values for weekdays starts from sunday=1 to sat=7 in quartz cron. The following mapping is used:
+Valid Values for 'recurrence':
+- NO_REPEAT ("does not repeat")
+- WEEKDAY ("every week day (mon - fri)")
+- DAILY ("daily")
+- WEEKLY ("weekly")
+- MONTHLY ("monthly")
+- YEARLY ("yearly")
+- WEEKEND ("weekend")
+- CUSTOM ("custom")
 
-Map<String, String> map = new HashMap<>();
-map.put("monday", "2");
-map.put("tuesday", "3");
-map.put("wednesday", "4");
-map.put("thursday", "5");
-map.put("friday", "6");
-map.put("saturday", "7");
-map.put("sunday", "1");
+Weekday Mapping (Quartz uses Sunday=1 to Saturday=7):
 
+monday -> 2
+tuesday -> 3
+wednesday -> 4
+thursday -> 5
+friday -> 6
+saturday -> 7
+sunday -> 1
 
-Examples:
+EXAMPLES BY RECURRENCE TYPE:
 
-Each example shows the input configuration and the resulting cron expression, along with an explanation of the schedule it represents.
+1. Do Not Repeat (NO_REPEAT):
 
-1. Do Not Repeat ("0")
+Input:
 {
- "startDate": "2025-02-12",
- "startTime": "10:08",
- "recurrence": "does not repeat"
+  "startDate": "2025-02-12",
+  "startTime": "10:08",
+  "recurrence": "does not repeat"
 }
-Explanation: The event occurs only once on 2025-02-12 at 10:08. No repetition.
 
--> 0 8 10 12 2 ? 2025 (Correct)
+Explanation: Occurs once on 2025-02-12 at 10:08.
 
+Cron Expression: 0 8 10 12 2 ? 2025
 
-2. Daily ("1")
+2. Daily (DAILY):
+
+Input:
 {
- "startDate": "2025-02-12",
- "startTime": "10:08",
- "recurrence": "daily"
+  "startDate": "2025-02-12",
+  "startTime": "10:08",
+  "recurrence": "daily"
 }
-Explanation: The event repeats every day at 10:08, starting from 2025-02-12.
 
--> 0 8 10 * * ? * (Correct)
+Explanation: Repeats every day at 10:08 from 2025-02-12.
 
+Cron Expression: 0 8 10 * * ? *
 
-3. Weekdays (Mon-Fri) ("5")
+3. Weekdays (Mon-Fri) (WEEKDAY):
+
+Input:
 {
- "startDate": "2025-02-12",
- "startTime": "10:08",
- "recurrence": "every week day (mon - fri)"
+  "startDate": "2025-02-12",
+  "startTime": "10:08",
+  "recurrence": "every week day (mon - fri)"
 }
-Explanation: The event repeats every weekday (Monday to Friday) at 10:08, starting from 2025-02-12.
 
--> 0 8 10 ? * 2-6 * (Correct)
+Explanation: Repeats every weekday (Monday to Friday) at 10:08 from 2025-02-12.
 
+Cron Expression: 0 8 10 ? * 2-6 *
 
-4. Weekly ("7")
+4. Weekly (WEEKLY):
+
+Input:
 {
- "startDate": "2025-02-12",
- "startTime": "10:08",
- "recurrence": "weekly"
+  "startDate": "2025-02-12",
+  "startTime": "10:08",
+  "recurrence": "weekly"
 }
-Explanation: The event repeats every week on the same day as the start date (2025-02-12 is a Wednesday) at 10:08.
 
--> 0 8 10 ? * 4 * (Correct)
+Explanation: Repeats every week on the same day as 2025-02-12 (Wednesday) at 10:08.
 
+Cron Expression: 0 8 10 ? * 4 *
 
-5. Monthly ("30")
+5. Monthly (MONTHLY):
+
+Input:
 {
- "startDate": "2025-02-12",
- "startTime": "10:08",
- "recurrence": "monthly"
+  "startDate": "2025-02-12",
+  "startTime": "10:08",
+  "recurrence": "monthly"
 }
-Explanation: The event repeats every month on the 12th day at 10:08, starting from 2025-02-12.
 
--> 0 8 10 12 * ? * (Correct)
+Explanation: Repeats every month on the 12th at 10:08 from 2025-02-12.
 
+Cron Expression: 0 8 10 12 * ? *
 
-6. Yearly ("12")
+6. Yearly (YEARLY):
+
+Input:
 {
- "startDate": "2025-02-12",
- "startTime": "10:08",
- "recurrence": "yearly"
+  "startDate": "2025-02-12",
+  "startTime": "10:08",
+  "recurrence": "yearly"
 }
-Explanation: The event repeats every year on February 12 at 10:08, starting from 2025-02-12.
 
--> 0 8 10 12 2 ? * (Correct)
+Explanation: Repeats every year on February 12 at 10:08 from 2025-02-12.
 
+Cron Expression: 0 8 10 12 2 ? *
 
-7. Weekends (Sat, Sun)
+7. Weekends (Sat, Sun) (WEEKEND):
+
+Input:
 {
- "startDate": "2025-02-12",
- "startTime": "10:08",
- "recurrence": "weekend"
+  "startDate": "2025-02-12",
+  "startTime": "10:08",
+  "recurrence": "weekend"
 }
-Explanation: The event repeats every weekend at 10:08, starting from 2025-02-12.
 
--> 0 8 10 ? * 1,7 * (Correct)
+Explanation: Repeats every weekend at 10:08 from 2025-02-12.
 
+Cron Expression: 0 8 10 ? * 1,7 *
 
-8. Custom Recurrence ("Custom")
-For custom recurrence, the customRecurrence object is populated. Here are examples for each possible unit value (week, month, year):
+8. Custom Recurrence (CUSTOM):
 
- a. Custom Weekly Recurrence
+For custom recurrence, customRecurrence object is used.
+
+a. Custom Weekly Recurrence:
+
+Input:
+{
+  "startDate": "2025-02-12",
+  "startTime": "10:08",
+  "recurrence": "custom",
+  "customRecurrence": {
+    "startDate": "2025-02-12",
+    "repeatEvery": 2,
+    "unit": "weekly",
+    "selectedDays": ["Monday", "Saturday"]
+  }
+}
+
+Explanation: Repeats every 2 weeks on Monday and Saturday at 10:08 from 2025-02-12. Frequency is handled in executor.
+
+Cron Expression: 0 8 10 ? * 2,7 *
+
+b. Custom Monthly Recurrence:
+
+Input:
+{
+  "startDate": "2025-02-12",
+  "startTime": "10:08",
+  "recurrence": "custom",
+  "customRecurrence": {
+    "startDate": "2025-02-12",
+    "repeatEvery": 4,
+    "unit": "monthly"
+  }
+}
+
+Explanation: Repeats every 4 months on the 12th at 10:08 from 2025-02-12.
+
+Cron Expression: 0 8 10 12 */4 ? *
+
+(Note: "*/4" triggers every month; skipping months is handled in executor code.)
+
+c. Custom Yearly Recurrence:
+
+Input:
+{
+  "startDate": "2025-02-12",
+  "startTime": "10:08",
+  "recurrence": "custom",
+  "customRecurrence": {
+    "startDate": "2025-02-12",
+    "repeatEvery": 4,
+    "unit": "yearly"
+  }
+}
+
+Explanation: Repeats every 4 years on February 12 at 10:08 from 2025-02-12.
+
+Cron Expression: 0 8 10 12 2 ? */4
+
+d. Custom Hourly Recurrence:
+
+Input:
 {
  "startDate": "2025-02-12",
  "startTime": "10:08",
  "recurrence": "custom",
  "customRecurrence": {
- "startDate": "2025-02-12",
- "repeatEvery": 2,
- "unit": "weekly",
- "selectedDays": ["Monday", "Saturday"]
+  "startDate": "2025-02-12",
+  "repeatEvery": 4,
+  "unit": "hour"
  }
 }
-Explanation: The event repeats every 2 weeks on Monday and Saturday at 10:08, starting from 2025-02-12. The frequency is handled in the executor using 4 variables(count, frequency, actualCount, numOfDays), set while scheduling job in job.
 
--> 0 8 10 ? * 2,7 * (Correct)
--> Works
+Explanation: Repeats every 4 hours, starting from 2025-02-12 at 10:08 AM.
 
+Cron Expression: 0 8 */4 * * ? *
 
- b. Custom Monthly Recurrence
+e. Custom Daily Recurrence:
+
+Input:
 {
  "startDate": "2025-02-12",
  "startTime": "10:08",
  "recurrence": "custom",
  "customRecurrence": {
- "startDate": "2025-02-12",
- "repeatEvery": 4,
- "unit": "monthly"
+  "startDate": "2025-02-12",
+  "repeatEvery": 4,
+  "unit": "daily"
  }
 }
-Explanation: The event repeats every 4 months on the 12th day of the month at 10:08, starting from 2025-02-12.
 
--> 0 8 10 12 */4 ? * (Correct)
--> Works
+Explanation: Repeats every 4 days, starting from 2025-02-12.
 
+Cron Expression: 0 8 10 */4 * ? *
 
- c. Custom Yearly Recurrence
+f. Custom Minute Recurrence:
+
+Input:
 {
  "startDate": "2025-02-12",
  "startTime": "10:08",
  "recurrence": "custom",
  "customRecurrence": {
- "startDate": "2025-02-12",
- "repeatEvery": 4,
- "unit": "yearly"
+  "startDate": "2025-02-12",
+  "repeatEvery": 15,
+  "unit": "minutes"
  }
 }
-Explanation: The event repeats every 4 years on February 12 at 10:08, starting from 2025-02-12.
 
--> 0 8 10 12 2 ? */4 (Correct)
--> Works
+Explanation: Repeats every 15 minutes, starting from 2025-02-12 at 10:08 AM.
 
+Cron Expression: 0 */15 10 * * ? *
 
- d. Custom Hourly Recurrence
+EXECUTOR CODE SNIPPET (FOR CUSTOM RECURRENCES):
+
+Custom recurrences use Quartz cron for triggering at regular intervals, but skipping logic is in executor code:
+
 {
- "startDate": "2025-02-12",
- "startTime": "10:08",
- "recurrence": "custom",
- "customRecurrence": {
- "startDate": "2025-02-12",
- "repeatEvery": 4,
- "unit": "hour"
- }
+            JobDetail jobDetail = context.getJobDetail();
+            JobDataMap jobDataMap = jobDetail.getJobDataMap();
+            String jobId = jobDataMap.getString("jobId");
+            String startDate = jobDataMap.getString("startDate");
+            String startTime = jobDataMap.getString("startTime");
+            LocalDate date = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String minutes = startTime.substring(3, 5);
+            String hours = startTime.substring(0, 2);
+            LocalDateTime dateTime = LocalDateTime.of(date, LocalTime.of(Integer.parseInt(hours), Integer.parseInt(minutes)));
+            LocalDateTime now = LocalDateTime.now();
+ 
+           if (now.isBefore(dateTime)) {
+               System.out.println("Current time is too early, current time: " + now + ", start time: " + dateTime);
+               return;
+          }
 }
-Explanation: The event repeats every 4 hours, starting from 2025-02-12, 10:08.
 
--> 0 8 10/4 * * ? * (Correct)
--> Works
+This code ensures that the action is only executed if the current time is after the start time.
 
+INPUT EXAMPLES SUMMARY
 
- e. Custom Daily Recurrence
-{
- "startDate": "2025-02-12",
- "startTime": "10:08",
- "recurrence": "custom",
- "customRecurrence": {
- "startDate": "2025-02-12",
- "repeatEvery": 4,
- "unit": "daily"
- }
-}
-Explanation: The event repeats every 4 days, starting from 2025-02-12.
+Recurrence Type	Example Input
+Do Not Repeat	{"startDate": "2025-02-12", "startTime": "10:08", "recurrence": "does not repeat"}
+Daily	{"startDate": "2025-02-12", "startTime": "10:08", "recurrence": "daily"}
+Weekdays	{"startDate": "2025-02-12", "startTime": "10:08", "recurrence": "every week day (mon - fri)"}
+Weekly	{"startDate": "2025-02-12", "startTime": "10:08", "recurrence": "weekly"}
+Monthly	{"startDate": "2025-02-12", "startTime": "10:08", "recurrence": "monthly"}
+Yearly	{"startDate": "2025-02-12", "startTime": "10:08", "recurrence": "yearly"}
+Weekends	{"startDate": "2025-02-12", "startTime": "10:08", "recurrence": "weekend"}
+Custom Weekly	{"startDate": "2025-02-12", "startTime": "10:08", "recurrence": "custom", "customRecurrence": {"startDate": "2025-02-12", "repeatEvery": 2, "unit": "weekly", "selectedDays": ["Monday", "Saturday"]}}
+Custom Monthly	{"startDate": "2025-02-12", "startTime": "10:08", "recurrence": "custom", "customRecurrence": {"startDate": "2025-02-12", "repeatEvery": 3, "unit": "monthly"}}
+Custom Yearly	{"startDate": "2025-02-12", "startTime": "10:08", "recurrence": "custom", "customRecurrence": {"startDate": "2025-02-12", "repeatEvery": 2, "unit": "yearly"}}
+Custom Hourly	{"startDate": "2025-02-12", "startTime": "10:08", "recurrence": "custom", "customRecurrence": {"startDate": "2025-02-12", "repeatEvery": 4, "unit": "hour"}}
+Custom Daily	{"startDate": "2025-02-12", "startTime": "10:08", "recurrence": "custom", "customRecurrence": {"startDate": "2025-02-12", "repeatEvery": 4, "unit": "daily"}}
+Custom Minute	{"startDate": "2025-02-12", "startTime": "10:08", "recurrence": "custom", "customRecurrence": {"startDate": "2025-02-12", "repeatEvery": 15, "unit": "minutes"}}
 
--> 0 8 10 12/4 * ? * (Correct)
--> Works
+CRON EXPRESSION BREAKDOWN EXAMPLE
 
+For example, the cron expression 0 8 10 ? * 2,6 * is:
 
-Summary of Input Examples
+0: Seconds (00)
 
-The following table provides a concise summary of the recurrence types and example input configurations.
+8: Minutes (08)
 
-| Recurrence Type  | Example Input
-|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Do Not Repeat    | { "startDate": "2025-02-12", "startTime": "10:08", "recurrence": "does not repeat" }
-| Daily            | { "startDate": "2025-02-12", "startTime": "10:08", "recurrence": "daily" }
-| Weekdays         | { "startDate": "2025-02-12", "startTime": "10:08", "recurrence": "every week day (mon - fri)" }
-| Weekly           | { "startDate": "2025-02-12", "startTime": "10:08", "recurrence": "weekly" }
-| Monthly          | { "startDate": "2025-02-12", "startTime": "10:08", "recurrence": "monthly" }
-| Yearly           | { "startDate": "2025-02-12", "startTime": "10:08", "recurrence": "yearly" }
-| Weekends         | { "startDate": "2025-02-12", "startTime": "10:08", "recurrence": "weekend" }
-| Custom Weekly    | { "startDate": "2025-02-12", "startTime": "10:08", "recurrence": "custom", "customRecurrence": { "startDate": "2025-02-12", "repeatEvery": 2, "unit": "weekly", "selectedDays": ["Monday", "Saturday"] } }
-| Custom Monthly   | { "startDate": "2025-02-12", "startTime": "10:08", "recurrence": "custom", "customRecurrence": { "startDate": "2025-02-12", "repeatEvery": 3, "unit": "monthly"} }
-| Custom Yearly    | { "startDate": "2025-02-12", "startTime": "10:08", "recurrence": "custom", "customRecurrence": { "startDate": "2025-02-12", "repeatEvery": 2, "unit": "yearly"} }
+10: Hours (10)
 
+?: Day of the month (no specific day)
 
-Example Cron Expression Breakdown
+*: Month (every month)
 
-For example, the cron expression 0 8 10 ? * 2,6 * is broken down as follows:
+2,6: Day of the week (Monday and Friday)
 
-- 0: Seconds (00)
-- 8: Minutes (08)
-- 10: Hours (10)
-- ?: Day of the month (no specific day)
-- *: Month (every month)
-- 2,6: Day of the week (Monday and Friday)
-- *: Year (every year)
+*: Year (every year)
