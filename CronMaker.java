@@ -1,3 +1,6 @@
+package com.action_service.Service;
+
+import com.action_service.Entites.JobConfigurations;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -47,6 +50,8 @@ import java.util.*;
  *   <li>"Monthly"</li>
  *   <li>"Yearly"</li>
  *   <li>"Weekend"</li>
+ *   <li>"Hour"</li>
+ *   <li>"Minute"</li>
  *   <li>"Custom"</li>
  * </ul>
  *
@@ -96,11 +101,25 @@ import java.util.*;
  *
  * <h3>Job Execution Logic:</h3>
  * <p>Before execution, the system ensures that the current time is after the start date and time.</p>
+ *
  * <pre>
- * {@code if (now.isBefore(dateTime)) {
- *     System.out.println("Current time is too early, current time: " + now + ", start time: " + dateTime);
- *     return;
- * }}
+ * {@code
+ *           JobDetail jobDetail = context.getJobDetail();
+ *           JobDataMap jobDataMap = jobDetail.getJobDataMap();
+ *           String jobId = jobDataMap.getString("jobId");
+ *           String startDate = jobDataMap.getString("startDate");
+ *           String startTime = jobDataMap.getString("startTime");
+ *           LocalDate date = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+ *           String minutes = startTime.substring(3, 5);
+ *           String hours = startTime.substring(0, 2);
+ *           LocalDateTime dateTime = LocalDateTime.of(date, LocalTime.of(Integer.parseInt(hours), Integer.parseInt(minutes)));
+ *           LocalDateTime now = LocalDateTime.now();
+ *
+ *          if (now.isBefore(dateTime)) {
+ *              System.out.println("Current time is too early, current time: " + now + ", start time: " + dateTime);
+ *              return;
+ *          }
+ *}
  * </pre>
  *
  * <h3>Handling Weekly Custom Recurrence:</h3>
@@ -141,6 +160,7 @@ public class CronMaker {
         YEARLY("yearly"),
         WEEKEND("weekend"),
         HOUR("hour"),
+        MINUTES("minutes"),
         CUSTOM("custom");
 
         private final String value;
@@ -266,10 +286,11 @@ public class CronMaker {
             //different case for "weekly" only handle at execution lvl
             case WEEKLY -> makeCron("0", minutes, hours, "?", "*", selectedDays, "*");
 
-            case DAILY -> makeCron("0", minutes, hours, day + "/" + frequency, "*", "*", "*");
+            case MINUTES -> makeCron("0", "*/"+frequency,  "*", "?", "*", "*", "*");
+            case HOUR -> makeCron("0", minutes,  "*/" + frequency, "?", "*", "*", "*");
+            case DAILY -> makeCron("0", minutes, hours,"*/" + frequency, "*", "*", "*");
             case MONTHLY -> makeCron("0", minutes, hours, day, "*/" + frequency, "?", "*");
             case YEARLY -> makeCron("0", minutes, hours, day, month, "?", "*/" + frequency);
-            case HOUR -> makeCron("0", minutes, hours + "/" + frequency, "*", "*", "*", "*");
             default ->
                     throw new IllegalArgumentException("Cannot provide cron expression for recurrence: " + recurrence);
         };
