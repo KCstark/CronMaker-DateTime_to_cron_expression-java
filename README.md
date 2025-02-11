@@ -46,7 +46,7 @@ Simple Recurrence Examples:
 
 1. No Repeat:
 Input:
-'''json
+```
 {
     "startDate": "2025-02-12",
     "startTime": "10:08",
@@ -57,56 +57,68 @@ Cron: 0 8 10 12 2 ? 2025
 
 3. Daily:
 Input:
+```
 {
     "startDate": "2025-02-12",
     "startTime": "10:08",
     "recurrence": "daily"
 }
+```
 Cron: 0 8 10 * * ? *
 
-4. Weekdays:
+5. Weekdays:
 Input:
+```
 {
     "startDate": "2025-02-12",
     "startTime": "10:08",
     "recurrence": "every week day (mon - fri)"
 }
+```
 Cron: 0 8 10 ? * 2-6 *
 
-5. Weekly:
+7. Weekly:
 Input:
+```
 {
     "startDate": "2025-02-12",
     "startTime": "10:08",
     "recurrence": "weekly"
 }
+```
 Cron: 0 8 10 ? * 4 *
 
-6. Monthly:
+9. Monthly:
 Input:
+```
 {
     "startDate": "2025-02-12",
     "startTime": "10:08",
     "recurrence": "monthly"
 }
+```
 Cron: 0 8 10 12 * ? *
 
-7. Yearly:
+11. Yearly:
 Input:
+```
 {
     "startDate": "2025-02-12",
     "startTime": "10:08",
     "recurrence": "yearly"
 }
+```
 Cron: 0 8 10 12 2 ? *
 
-8. Weekend:
+13. Weekend:
 Input:
+```
 {
     "startDate": "2025-02-12",
     "startTime": "10:08",
     "recurrence": "weekend"
 }
+```
 Cron: 0 8 10 ? * 1,7 *
 
 Custom Recurrence Examples:
@@ -123,6 +135,7 @@ javaDoc if you are interested.
 
 1. Custom Weekly:
 Input:
+```
 {
     "startDate": "2025-02-12",
     "startTime": "10:08",
@@ -134,10 +147,12 @@ Input:
         "selectedDays": ["Monday", "Saturday"]
     }
 }
+```
 Cron: 0 8 10 ? * 2,7 *
 
-2. Custom Monthly:
+3. Custom Monthly:
 Input:
+```
 {
     "startDate": "2025-02-12",
     "startTime": "10:08",
@@ -148,10 +163,12 @@ Input:
         "unit": "monthly"
     }
 }
+```
 Cron: 0 8 10 12 */4 ? *
 
-3. Custom Yearly:
+5. Custom Yearly:
 Input:
+```
 {
     "startDate": "2025-02-12",
     "startTime": "10:08",
@@ -162,10 +179,12 @@ Input:
         "unit": "yearly"
     }
 }
+```
 Cron: 0 8 10 12 2 ? */4
 
-4. Custom Hourly:
+7. Custom Hourly:
 Input:
+```
 {
     "startDate": "2025-02-12",
     "startTime": "10:08",
@@ -176,10 +195,12 @@ Input:
         "unit": "hour"
     }
 }
+```
 Cron: 0 8 */4 * * ? *
 
-5. Custom Daily:
+9. Custom Daily:
 Input:
+```
 {
     "startDate": "2025-02-12",
     "startTime": "10:08",
@@ -190,10 +211,12 @@ Input:
         "unit": "daily"
     }
 }
+```
 Cron: 0 8 10 */4 * ? *
 
-6. Custom Minutes:
+11. Custom Minutes:
 Input:
+```
 {
     "startDate": "2025-02-12",
     "startTime": "10:08",
@@ -204,6 +227,7 @@ Input:
         "unit": "minutes"
     }
 }
+```
 Cron: 0 */15 10 * * ? *
 
 UNDERSTANDING CRON EXPRESSIONS
