@@ -1,6 +1,5 @@
 # CronMaker - Custom DateTime to cron expression - java
 
-=====================================
 CUSTOM QUARTZ CRON EXPRESSION GENERATOR
 =====================================
 
