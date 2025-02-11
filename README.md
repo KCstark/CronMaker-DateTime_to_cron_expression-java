@@ -46,14 +46,16 @@ Simple Recurrence Examples:
 
 1. No Repeat:
 Input:
+'''json
 {
     "startDate": "2025-02-12",
     "startTime": "10:08",
     "recurrence": "does not repeat"
 }
+```
 Cron: 0 8 10 12 2 ? 2025
 
-2. Daily:
+3. Daily:
 Input:
 {
     "startDate": "2025-02-12",
@@ -62,7 +64,7 @@ Input:
 }
 Cron: 0 8 10 * * ? *
 
-3. Weekdays:
+4. Weekdays:
 Input:
 {
     "startDate": "2025-02-12",
@@ -71,7 +73,7 @@ Input:
 }
 Cron: 0 8 10 ? * 2-6 *
 
-4. Weekly:
+5. Weekly:
 Input:
 {
     "startDate": "2025-02-12",
@@ -80,7 +82,7 @@ Input:
 }
 Cron: 0 8 10 ? * 4 *
 
-5. Monthly:
+6. Monthly:
 Input:
 {
     "startDate": "2025-02-12",
@@ -89,7 +91,7 @@ Input:
 }
 Cron: 0 8 10 12 * ? *
 
-6. Yearly:
+7. Yearly:
 Input:
 {
     "startDate": "2025-02-12",
@@ -98,7 +100,7 @@ Input:
 }
 Cron: 0 8 10 12 2 ? *
 
-7. Weekend:
+8. Weekend:
 Input:
 {
     "startDate": "2025-02-12",
