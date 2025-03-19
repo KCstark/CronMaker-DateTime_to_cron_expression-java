@@ -1,6 +1,7 @@
 package com.action_service.Service;
 
 import com.action_service.Entites.JobConfigurations;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -145,11 +146,29 @@ import java.util.*;
  *         jobDataMap.put("count", String.valueOf(count));
  *         jobDataMap.put("actualCount", String.valueOf(actualCount));
  *     }
- * }}
+ * }
+ *         try {
+ *             Scheduler scheduler = context.getScheduler();
+ *             JobKey jobKey = context.getJobDetail().getKey();
+ *
+ *             JobDetail newJobDetail = JobBuilder.newJob(JobExecutioner.class)
+ *                     .withIdentity(jobKey)
+ *                     .usingJobData(jobDataMap)
+ *                     .storeDurably()
+ *                     .withDescription(context.getJobDetail().getDescription())
+ *                     .build();
+ *
+ *             scheduler.addJob(newJobDetail, true);//updating existing job only
+ *             log.info("Successfully updated job data for job: {}", jobKey.getName());
+ *             } catch (Exception e) {
+ *             log.error("Failed to update job data: {}", e.getMessage(), e);
+ *             }
+ * }
  * </pre>
  */
-
+@Slf4j
 public class CronMaker {
+
 
     public enum Recurrence {
         NO_REPEAT("does not repeat"),
@@ -214,6 +233,7 @@ public class CronMaker {
     }
 
     public static String createCron(JobConfigurations configurations) {
+        log.info("Creating cron using CronMaker...");
         LocalDate startDate;
         try {
             startDate = LocalDate.parse(configurations.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
